@@ -254,8 +254,8 @@ impl Display for Value {
             Ok(())
         } else {
             match self.get_type() {
-                ValueType::UNKNOWN => write!(f, "{}", "unknown"),
-                ValueType::CUSTOM => write!(f, "{}", "custom"),
+                ValueType::UNKNOWN => write!(f, "unknown"),
+                ValueType::CUSTOM => write!(f, "custom"),
                 ValueType::ASCII | ValueType::TEXT | ValueType::VARCHAR => {
                     write_value(f, self.get_string(), |f, v| write!(f, "{}", v))
                 }
@@ -302,14 +302,13 @@ impl Display for Value {
 
 impl Value {
     /// Get the raw bytes of this Cassandra value.
-    #[allow(cast_possible_truncation)]
     pub fn get_bytes(&self) -> Result<&[u8]> {
         unsafe {
             let mut output = mem::zeroed();
             let mut output_size = mem::zeroed();
             let result = cass_value_get_bytes(self.0, &mut output, &mut output_size);
             // raw2utf8(output, output_size).unwrap()
-            let slice = slice::from_raw_parts(output, output_size as usize);
+            let slice = slice::from_raw_parts(output, output_size);
             result.to_result(slice)
         }
     }

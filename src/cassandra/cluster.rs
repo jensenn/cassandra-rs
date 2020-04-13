@@ -120,7 +120,7 @@ impl Cluster {
     ///
     pub fn set_contact_points(&mut self, contact_points: &str) -> Result<&mut Self> {
         unsafe {
-            let s = CString::new(contact_points.clone())?;
+            let s = CString::new(contact_points)?;
             let err = cass_cluster_set_contact_points(self.0, s.as_ptr());
             err.to_result(self)
         }
@@ -132,7 +132,7 @@ impl Cluster {
     /// Only numeric addresses are supported.
     pub fn set_local_address(&mut self, name: &str) -> Result<&mut Self> {
         unsafe {
-            let s = CString::new(name.clone())?;
+            let s = CString::new(name)?;
             let err = cass_cluster_set_local_address(self.0, s.as_ptr());
             err.to_result(self)
         }
@@ -335,7 +335,6 @@ impl Cluster {
     ///
     ///
     /// Default: 5000ms
-    #[allow(cast_possible_truncation, cast_sign_loss)]
     pub fn set_connect_timeout(&mut self, timeout: Duration) -> &Self {
         unsafe {
             cass_cluster_set_connect_timeout(self.0, timeout.num_milliseconds() as u32);
@@ -347,7 +346,6 @@ impl Cluster {
     ///
     ///
     /// Default: 12000ms
-    #[allow(cast_possible_truncation, cast_sign_loss)]
     pub fn set_request_timeout(&mut self, timeout: Duration) -> &Self {
         unsafe {
             cass_cluster_set_request_timeout(self.0, timeout.num_milliseconds() as u32);
@@ -464,7 +462,6 @@ impl Cluster {
     ///  <li>update_rate_ms: 100 milliseconds</li>
     ///  <li>min_measured: 50</li>
     /// </ul>
-    #[allow(cast_sign_loss)]
     pub fn set_latency_aware_routing_settings(
         &mut self,
         exclusion_threshold: f64,
@@ -519,7 +516,6 @@ impl Cluster {
     ///
     ///
     /// Default: false (disabled).
-    #[allow(cast_possible_truncation, cast_sign_loss)]
     pub fn set_tcp_keepalive(&mut self, enable: bool, delay: Duration) -> &Self {
         unsafe {
             cass_cluster_set_tcp_keepalive(
@@ -550,7 +546,6 @@ impl Cluster {
     ///
     ///
     /// Default: 30 seconds
-    #[allow(cast_possible_truncation, cast_sign_loss)]
     pub fn set_connection_heartbeat_interval(&mut self, hearbeat: Duration) -> &mut Self {
         unsafe {
             cass_cluster_set_connection_heartbeat_interval(self.0, hearbeat.num_seconds() as u32);
@@ -563,7 +558,6 @@ impl Cluster {
     ///
     ///
     /// Default: 60 seconds
-    #[allow(cast_possible_truncation, cast_sign_loss)]
     pub fn set_connection_idle_timeout(&mut self, timeout: Duration) -> &mut Self {
         unsafe {
             cass_cluster_set_connection_idle_timeout(self.0, timeout.num_seconds() as u32);

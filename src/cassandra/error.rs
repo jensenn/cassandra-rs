@@ -141,7 +141,7 @@ pub(crate) unsafe fn build_error_result(
             let mut args = vec![];
             for i in 0..i {
                 let arg = get_lossy_string(|s, s_len| cass_error_result_arg_type(e, i, s, s_len))
-                    .unwrap_or("<error>".to_string());
+                    .unwrap_or_else(|| "<error>".to_string());
                 args.push(arg);
             }
             (function, args)

@@ -53,7 +53,7 @@ impl Default for Inet {
 
 impl Inet {
     /// Constructs an inet v4 object.
-    pub fn cass_inet_init_v4(address: &Ipv4Addr) -> Inet {
+    pub fn cass_inet_init_v4(address: Ipv4Addr) -> Inet {
         unsafe { Inet(cass_inet_init_v4(address.octets().as_ptr())) }
     }
 
@@ -66,7 +66,7 @@ impl Inet {
 impl<'a> From<&'a IpAddr> for Inet {
     fn from(ip_addr: &IpAddr) -> Inet {
         match *ip_addr {
-            IpAddr::V4(ref ipv4_addr) => Inet::cass_inet_init_v4(ipv4_addr),
+            IpAddr::V4(ref ipv4_addr) => Inet::cass_inet_init_v4(*ipv4_addr),
             IpAddr::V6(ref ipv6_addr) => Inet::cass_inet_init_v6(ipv6_addr),
         }
     }
@@ -122,7 +122,7 @@ impl<'a> From<&'a Inet> for IpAddr {
 #[test]
 fn ipv4_conversion() {
     let ipv4_in = Ipv4Addr::new(127, 0, 0, 1);
-    let inet = Inet::cass_inet_init_v4(&ipv4_in);
+    let inet = Inet::cass_inet_init_v4(ipv4_in);
     let ip_out = IpAddr::from(&inet);
     assert_eq!(IpAddr::V4(ipv4_in), ip_out);
 }

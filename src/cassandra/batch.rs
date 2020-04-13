@@ -70,12 +70,8 @@ impl CustomPayload {
     pub fn set(&self, name: String, value: &[u8]) -> Result<()> {
         unsafe {
             let name_cstr = CString::new(name)?;
-            Ok(cass_custom_payload_set(
-                self.0,
-                name_cstr.as_ptr(),
-                value.as_ptr(),
-                value.len(),
-            ))
+            cass_custom_payload_set(self.0, name_cstr.as_ptr(), value.as_ptr(), value.len());
+            Ok(())
         }
     }
 }
